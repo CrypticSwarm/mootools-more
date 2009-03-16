@@ -7,17 +7,18 @@ Script: Class.Binds.js
 
 	Authors:
 		Aaron Newton
-		Perrin Westrich
 */
 
 (function(){
 
-	var binder = function(self, binds, method){
+	var binder = function(self, binds){
 		var oldInit = self.initialize;
 		self.initialize = function(){
 			Array.flatten(binds).each(function(binder){
 				var original = this[binder];
-				this[binder] = original[method](this);
+				this[binder] = function(){
+					return original.apply(this, arguments);
+				}.bind(this);
 				this[binder].parent = original.parent;
 			}, this);
 			return oldInit.apply(this,arguments);
@@ -25,15 +26,10 @@ Script: Class.Binds.js
 		return self;
 	};
 
-	(function(bindName, bindMethod){
-		Class.Mutators[bindName] = function(self, binds){
-			if(!self[bindName]) return self;
-			delete self[bindName];
-			return binder(self, binds, bindMethod);
-		};
-		return arguments.callee;
-	})
-	('Binds', 'bind')
-	('BindsWithEvent', 'bindWithEvent');
+	Class.Mutators.Binds = function(self, binds){
+		if (!self.Binds) return self;
+		delete self.Binds;
+		return binder(self, binds);
+	};
 
 })();
