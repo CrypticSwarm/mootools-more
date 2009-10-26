@@ -79,8 +79,8 @@ Element.implement({
 			containerEdgePos = rel.getRelativeCoords(options.position, { ignoreScroll: options.ignoreScroll}),
 			pos = {x: containerEdgePos.x - elemEdgePos.x + options.offset.x, y: containerEdgePos.y - elemEdgePos.y + options.offset.y};
 		pos = {
-			left: ((pos.x >= -elemEdgePos.margins.left || parentPositioned || options.allowNegative) ? pos.x : 0).toInt(),
-			top: ((pos.y >= -elemEdgePos.margins.top || parentPositioned || options.allowNegative) ? pos.y : 0).toInt()
+			left: ((pos.x >= -elemEdgePos.margins.left || parentPositioned || options.allowNegative) ? pos.x : -elemEdgePos.margins.left).toInt(),
+			top: ((pos.y >= -elemEdgePos.margins.top || parentPositioned || options.allowNegative) ? pos.y : -elemEdgePos.margins.top).toInt()
 		};
 		var xy = {left: 'x', top: 'y'};
 		['minimum', 'maximum'].each(function(minmax) {

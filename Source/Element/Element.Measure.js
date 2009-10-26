@@ -163,10 +163,10 @@ Element.implement({
 		return $extend(styles, size);
 	},
 
-  getRelativeCoords: function(rel, opts, elem){
+	getRelativeCoords: function(rel, opts, elem){
 		opts = opts || {};
-    rel = Element.parsePositionString(rel);
-    coords = this.getCoordinates(elem);
+		rel = Element.parsePositionString(rel);
+		coords = this.getCoordinates(elem);
 		var margins = {}, scrolls;
 		['top', 'right', 'bottom', 'left'].each(function(side){
 			margins[side] = this.getStyle('margin-' + side).toInt();
@@ -179,21 +179,21 @@ Element.implement({
 			coords.width += margins.left + margins.right;
 			coords.height += margins.top + margins.bottom;
 		}
-    var ret = {
-      x: (rel && $chk(coords[rel.x])) ? coords[rel.x] : rel.x == 'center' ? (coords['left'] + coords['width']/2).toInt() : coords['left'],
-      y: (rel && $chk(coords[rel.y])) ? coords[rel.y] : rel.y == 'center' ? (coords['top'] + coords['height']/2).toInt() : coords['top']
-    };
+		var ret = {
+			x: (rel && $chk(coords[rel.x])) ? coords[rel.x] : rel.x == 'center' ? (coords['left'] + coords['width']/2).toInt() : coords['left'],
+			y: (rel && $chk(coords[rel.y])) ? coords[rel.y] : rel.y == 'center' ? (coords['top'] + coords['height']/2).toInt() : coords['top']
+		};
 		if(opts.positionMargins){
 			ret.x += margins.left;
 			ret.y += margins.top;
-			ret.margins = margins;
 		}
 		if(opts.ignoreScroll && false) {
 			scrolls = this.getScroll();
 			ret.x += scrolls.x;
 			ret.y += scrolls.y;
 		}
-    return ret;
-  }
+		ret.margins = margins;
+		return ret;
+	}
 
 });
