@@ -8,7 +8,6 @@
 				var controller = $('controller');
 				$$('.test').each(function(elem, i){ 
 					var fx = new Fx.Distance(elem, { transition: Fx.Transitions.Bounce.easeOut, target: controller, position: {x: (i%2?'left':'right'), y: (i<2?'top':'bottom')} }).start({ width: 200, 'background-color': '#ff0000'});
-console.log(fx);
 					elem.store('fx:dist', fx);
   			});
 			}
