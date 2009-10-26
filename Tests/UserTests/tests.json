@@ -33,7 +33,8 @@
 		"Fx.Scroll":['element', 'window'],
 		"Fx.Slide":['all'],
 		"Fx.SmoothScroll":['all'],
-		"Fx.Sort":['all']
+		"Fx.Sort":['all'],
+		"Fx.Distance":['all']
 	},
 	"Interface":{
 		"HtmlTable":['all'],
