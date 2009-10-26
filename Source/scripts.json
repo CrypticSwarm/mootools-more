@@ -205,6 +205,11 @@
 		"Fx.Sort": {
 			"deps": ["More", "Fx.Elements", "Element.Dimensions", "Element.Measure"],
 			"desc": "Reorders a group of items with a transition."
+		},
+
+		"Fx.Distance": {
+			"deps": ["Element.Measure", "Element.Dimensions", "Fx.Morph", "Element.Event"],
+			"desc": "Similar to morph but based on distance of mouse rather than time."
 		}
 
 	},

@@ -11,6 +11,7 @@ license: MIT-style license
 
 authors:
 - Aaron Newton
+- Perrin Westrich
 
 requires:
 - core:1.2.4/Element.Style
@@ -21,6 +22,23 @@ provides: [Element.Measure]
 
 ...
 */
+
+Element.extend({
+
+  parsePositionString: function(option){
+    if ($type(option) != 'string') return option;
+    option = option.toLowerCase();
+    var val = {};
+    if (option.test('left')) val.x = 'left';
+    else if (option.test('right')) val.x = 'right';
+    else val.x = 'center';
+    if (option.test('upper') || option.test('top')) val.y = 'top';
+    else if (option.test('bottom')) val.y = 'bottom';
+    else val.y = 'center';
+    return val;
+  }
+
+});
 
 Element.implement({
 
@@ -143,6 +161,16 @@ Element.implement({
 		}, this);
 
 		return $extend(styles, size);
-	}
+	},
+
+  getRelativeCoords: function(rel){
+    rel = Element.parsePositionString(rel);
+    coords = this.getCoordinates();
+    var ret = {
+      x: (rel && $chk(coords[rel.x])) ? coords[rel.x] : rel.x == 'center' ? (coords['left'] + coords['width']/2).toInt() : coords['left'],
+      y: (rel && $chk(coords[rel.y])) ? coords[rel.y] : rel.y == 'center' ? (coords['left'] + coords['height']/2).toInt() : coords['top']
+    };
+    return ret;
+  }
 
 });

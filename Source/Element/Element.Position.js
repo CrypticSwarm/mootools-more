@@ -62,22 +62,9 @@ Element.implement({
 			options.offset.x = options.offset.x - parentOffset.x;
 			options.offset.y = options.offset.y - parentOffset.y;
 		}
-		//upperRight, bottomRight, centerRight, upperLeft, bottomLeft, centerLeft
-		//topRight, topLeft, centerTop, centerBottom, center
-		var fixValue = function(option){
-			if ($type(option) != 'string') return option;
-			option = option.toLowerCase();
-			var val = {};
-			if (option.test('left')) val.x = 'left';
-			else if (option.test('right')) val.x = 'right';
-			else val.x = 'center';
-			if (option.test('upper') || option.test('top')) val.y = 'top';
-			else if (option.test('bottom')) val.y = 'bottom';
-			else val.y = 'center';
-			return val;
-		};
-		options.edge = fixValue(options.edge);
-		options.position = fixValue(options.position);
+
+		options.edge = Element.parsePositionString(options.edge);
+		options.position = Element.parsePositionString(options.position);
 		if (!options.edge){
 			if (options.position.x == 'center' && options.position.y == 'center') options.edge = {x:'center', y:'center'};
 			else options.edge = {x:'left', y:'top'};
