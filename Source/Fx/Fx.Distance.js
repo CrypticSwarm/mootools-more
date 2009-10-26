@@ -1,12 +1,22 @@
 /*
-Script: Fx.Distance.js
-	Defines Fx.Distance, a class that applys css changes based on distance the mouse is from the element.
+---
 
-	License:
-		MIT-style license.
+script: Fx.Distance.js
 
-	Authors:
-		Perrin Westrich
+description: Defines Fx.Distance, a class that is similar to Fx.Morph except executes the transition based on mouse distance from a spot on the element.
+
+license: MIT-style license
+
+authors:
+- Perrin Westrich
+
+requires:
+- core:1.2.4/Fx.Morph
+- core:1.2.4/Element.Event
+- core:1.2.4/Element.Dimensions
+- /Element.Measure
+
+provides: [Fx.Distance]
 
 */
 
