@@ -9,6 +9,7 @@ license: MIT-style license
 
 authors:
 - Aaron Newton
+- Perrin Westrich
 
 requires:
 - core:1.2.4/Element.Dimensions
@@ -71,72 +72,15 @@ Element.implement({
 		}
 
 		this.setStyle('position', 'absolute');
-		var rel = document.id(options.relativeTo) || document.body,
-				calc = rel == document.body ? window.getScroll() : rel.getPosition(),
-				top = calc.y, left = calc.x;
+		var rel = document.id(options.relativeTo) || document.body;
 
-		var scrolls = rel.getScrolls();
-		top += scrolls.y;
-		left += scrolls.x;
 
-		var dim = this.getDimensions({computeSize: true, styles:['padding', 'border','margin']});
-		var pos = {},
-				prefY = options.offset.y,
-				prefX = options.offset.x,
-				winSize = window.getSize();
-		switch(options.position.x){
-			case 'left':
-				pos.x = left + prefX;
-				break;
-			case 'right':
-				pos.x = left + prefX + rel.offsetWidth;
-				break;
-			default: //center
-				pos.x = left + ((rel == document.body ? winSize.x : rel.offsetWidth)/2) + prefX;
-				break;
-		}
-		switch(options.position.y){
-			case 'top':
-				pos.y = top + prefY;
-				break;
-			case 'bottom':
-				pos.y = top + prefY + rel.offsetHeight;
-				break;
-			default: //center
-				pos.y = top + ((rel == document.body ? winSize.y : rel.offsetHeight)/2) + prefY;
-				break;
-		}
-		if (options.edge){
-			var edgeOffset = {};
-
-			switch(options.edge.x){
-				case 'left':
-					edgeOffset.x = 0;
-					break;
-				case 'right':
-					edgeOffset.x = -dim.x-dim.computedRight-dim.computedLeft;
-					break;
-				default: //center
-					edgeOffset.x = -(dim.totalWidth/2);
-					break;
-			}
-			switch(options.edge.y){
-				case 'top':
-					edgeOffset.y = 0;
-					break;
-				case 'bottom':
-					edgeOffset.y = -dim.y-dim.computedTop-dim.computedBottom;
-					break;
-				default: //center
-					edgeOffset.y = -(dim.totalHeight/2);
-					break;
-			}
-			pos.x += edgeOffset.x;
-			pos.y += edgeOffset.y;
-		}
+		var elemEdgePos = this.getRelativeCoords(options.edge, { useMargins: !options.ignoreMargins, positionMargins: options.ignoreMargins }, this),
+			containerEdgePos = rel.getRelativeCoords(options.position, { ignoreScroll: options.ignoreScroll}),
+			pos = {x: containerEdgePos.x - elemEdgePos.x + options.offset.x, y: containerEdgePos.y - elemEdgePos.y + options.offset.y};
 		pos = {
-			left: ((pos.x >= 0 || parentPositioned || options.allowNegative) ? pos.x : 0).toInt(),
-			top: ((pos.y >= 0 || parentPositioned || options.allowNegative) ? pos.y : 0).toInt()
+			left: ((pos.x >= -elemEdgePos.margins.left || parentPositioned || options.allowNegative) ? pos.x : 0).toInt(),
+			top: ((pos.y >= -elemEdgePos.margins.top || parentPositioned || options.allowNegative) ? pos.y : 0).toInt()
 		};
 		var xy = {left: 'x', top: 'y'};
 		['minimum', 'maximum'].each(function(minmax) {
@@ -149,23 +93,6 @@ Element.implement({
 			var winScroll = window.getScroll();
 			pos.top+= winScroll.y;
 			pos.left+= winScroll.x;
-		}
-		if (options.ignoreScroll) {
-			var relScroll = rel.getScroll();
-			pos.top-= relScroll.y;
-			pos.left-= relScroll.x;
-		}
-		if (options.ignoreMargins) {
-			pos.left += (
-				options.edge.x == 'right' ? dim['margin-right'] : 
-				options.edge.x == 'center' ? -dim['margin-left'] + ((dim['margin-right'] + dim['margin-left'])/2) : 
-					- dim['margin-left']
-			);
-			pos.top += (
-				options.edge.y == 'bottom' ? dim['margin-bottom'] : 
-				options.edge.y == 'center' ? -dim['margin-top'] + ((dim['margin-bottom'] + dim['margin-top'])/2) : 
-					- dim['margin-top']
-			);
 		}
 		pos.left = Math.ceil(pos.left);
 		pos.top = Math.ceil(pos.top);
